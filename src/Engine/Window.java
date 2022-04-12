@@ -7,6 +7,8 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import util.Time;
+
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -21,9 +23,11 @@ public class Window {
     private String title;
     private long glfwWindow;
 
-    private float r,g,b,a;
+    public float r,g,b,a;
 
     private boolean fadeToBlack = false;
+
+    private static Scene currentScene = null;
 
 
     //allows for only one instance of window
@@ -40,6 +44,24 @@ public class Window {
         b = 1;
         a = 1;
 
+    }
+
+    public static void changeScene(int newScene){
+        switch (newScene) {
+            case 0:
+                currentScene = new LevelEditorScene();
+                //currentScene.innit();
+                break;
+            
+            case 1:
+                currentScene = new LevelScene();
+                //currentSCene.innit();
+                break;
+
+            default:
+                assert false : "Unknown scene '"+ newScene + "'";
+                break;
+        }
     }
 
     //creates only one
@@ -110,9 +132,15 @@ public class Window {
 		// creates the GLCapabilities instance and makes the OpenGL
 		// bindings available for use.
         GL.createCapabilities();
+
+        Window.changeScene(0);
     }
 
     public void loop(){
+        float beginTime = Time.getTime();
+        float endTime = Time.getTime();
+        float dt = -1.0f;
+
         while (!glfwWindowShouldClose(glfwWindow)) {
             //Poll events
             glfwPollEvents();
@@ -120,31 +148,16 @@ public class Window {
             glClearColor(r,g,b,a);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            if (!fadeToBlack) {
-                r = Math.min(r + 0.01f, 1);
-                g = Math.min(g + 0.01f, 1);
-                b = Math.min(b + 0.01f, 1);
-                a = Math.min(a + 0.01f, 1);
+            if (dt>=0) {
+                currentScene.update(dt);
             }
             
-            if (fadeToBlack) {
-                r = Math.max(r - 0.01f, 0);
-                g = Math.max(g - 0.01f, 0);
-                b = Math.max(b - 0.01f, 0);
-                a = Math.max(a - 0.01f, 0);
-                fadeToBlack = false;
-            }
-
-
-            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-                fadeToBlack = true;
-                
-            }
-
-
 
 
             glfwSwapBuffers(glfwWindow);
+            endTime = Time.getTime();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
     }
 }
