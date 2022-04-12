@@ -50,12 +50,12 @@ public class Window {
         switch (newScene) {
             case 0:
                 currentScene = new LevelEditorScene();
-                //currentScene.innit();
+                currentScene.init();
                 break;
             
             case 1:
                 currentScene = new LevelScene();
-                //currentSCene.innit();
+                currentScene.init();
                 break;
 
             default:
