@@ -1,44 +1,31 @@
 package Engine;
 
 import renderer.*;
+import util.Time;
+
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class LevelEditorScene extends Scene {
 
-    private String vertexShaderSrc = "#version 330 core\n" +
-    "layout(location = 0) in vec3 aPos;\n" +
-    "layout(location = 1) in vec4 aColor;\n" +
-    "out vec4 fColor;\n" +
-    "void main(){\n" +
-    "   fColor = aColor;\n" +
-    "   gl_Position = vec4(aPos,1.0);\n" +
-    "}\n";
-
-
-    private String fragmentShaderSrc = "#version 330 core\n" +
-    "in vec4 fColor;\n" +
-    "out vec4 color;\n" +
-    "void main(){\n" +
-    "    color = fColor;\n" +
-    "}";
 
 
     private int vertexID, fragmentID, shaderProgram;
 
     private float[] vertexArray = {
         //position              //color
-         0.5f,  -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,     //bottom right
-        -0.5f,   0.5f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f,     //top left
-         0.5f,   0.5f, 0.0f,    0.0f, 0.0f, 1.0f, 1.0f,     //top right
-        -0.5f,  -0.5f, 0.0f,    1.0f, 1.0f, 0.0f, 1.0f,     //bottom left
+        100.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,     //bottom right
+        0.5f,    100.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,     //top left
+        100.5f,  100.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,     //top right
+        0.5f,    0.5f, 0.0f,    1.0f, 1.0f, 0.0f, 1.0f,     //bottom left
     };
 
     //IMPORTANT: must be in counter clockwise order
@@ -53,14 +40,16 @@ public class LevelEditorScene extends Scene {
     private Shader defaultShader;
 
     public LevelEditorScene(){
-        defaultShader = new Shader("assets/shaders/defaultShader.glsl");
-        defaultShader.compile();
+        
     }
 
 
     @Override
     public void init() {
-        
+        this.camera = new Camera(new Vector2f());
+        defaultShader = new Shader("assets/shaders/defaultShader.glsl");
+        defaultShader.compile();
+
 
 
         // ============================================================
@@ -100,8 +89,14 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void update(float dt) {
-        defaultShader.use();
 
+        camera.position.x-=dt*50.0f;
+        camera.position.y-=dt*20.0f;
+
+        defaultShader.use();
+        defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
+        defaultShader.uploadMat4f("uView", camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getTime());
         //bind the vao
         glBindVertexArray(vaoID);
         
