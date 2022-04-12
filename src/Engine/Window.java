@@ -21,6 +21,8 @@ public class Window {
     private String title;
     private long glfwWindow;
 
+    private float r,g,b,a;
+
 
     //allows for only one instance of window
     private static Window window = null;
@@ -31,6 +33,11 @@ public class Window {
         this.width = 1920;
         this.height = 1080;
         this.title = "Boids";
+        r = 1;
+        g = 1;
+        b = 1;
+        a = 1;
+
     }
 
     //creates only one
@@ -82,6 +89,7 @@ public class Window {
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
+        glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
 
 
         //make the OpenGL context current
@@ -107,8 +115,13 @@ public class Window {
             //Poll events
             glfwPollEvents();
 
-            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                System.out.println("Space key is pressed");
+            }
+
 
             glfwSwapBuffers(glfwWindow);
         }
