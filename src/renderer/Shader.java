@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import org.joml.Matrix4f;
 import org.joml.*;
@@ -60,8 +58,8 @@ public class Shader {
             assert false: "Error: Could not open file for shader '"+ filepath+"'";
         }
 
-        System.out.println(vertexSource);
-        System.out.println(fragmentSource);
+        // System.out.println(vertexSource);
+        // System.out.println(fragmentSource);
     }
 
     public void compile(){
@@ -176,5 +174,11 @@ public class Shader {
         FloatBuffer matBuffer = BufferUtils.createFloatBuffer(9);
         mat3.get(matBuffer);
         glUniformMatrix3fv(varLoaction, false, matBuffer);
+    }
+
+    public void uploadTexture(String varName, int slot){
+        int varLoaction = glGetUniformLocation(shaderProgramID, varName);
+        use();
+        glUniform1i(varLoaction, slot);
     }
 }
