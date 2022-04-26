@@ -48,7 +48,7 @@ public class RenderBatch {
         vaoID = glGenVertexArrays();
         glBindVertexArray(vaoID);
 
-        //allocat space for vertices
+        //allocate space for vertices
         vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertices.length*Float.BYTES, GL_DYNAMIC_DRAW);
@@ -96,7 +96,7 @@ public class RenderBatch {
 
         //use shader
         shader.use();
-        shader.uploadMat4f("uProjections", Window.getScene().getCamera().getProjectionMatrix());
+        shader.uploadMat4f("uProjection", Window.getScene().getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", Window.getScene().getCamera().getViewMatrix());
 
         glBindVertexArray(vaoID);
