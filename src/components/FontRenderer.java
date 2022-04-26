@@ -1,7 +1,6 @@
 package components;
 
 import Engine.Component;
-import javafx.scene.text.Font;
 
 public class FontRenderer extends Component{
 

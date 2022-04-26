@@ -27,8 +27,6 @@ public class Window {
 
     public float r,g,b,a;
 
-    private boolean fadeToBlack = false;
-
     private static Scene currentScene = null;
 
 
@@ -74,6 +72,10 @@ public class Window {
             Window.window = new Window();
         }
         return Window.window;
+    }
+
+    public static Scene getScene(){
+        return get().currentScene;
     }
 
     public void run(){
