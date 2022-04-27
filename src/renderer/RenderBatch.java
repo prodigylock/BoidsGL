@@ -1,6 +1,8 @@
 package renderer;
 
 import components.SpriteRenderer;
+import util.AssetPool;
+
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -31,7 +33,8 @@ public class RenderBatch {
     private Shader shader;
 
     public RenderBatch(int maxBatchSize){
-        shader = new Shader("assets/shaders/defaultShader.GLSL");
+
+        shader = AssetPool.getShader("assets/shaders/defaulShaders.glsl");
         shader.compile();
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;

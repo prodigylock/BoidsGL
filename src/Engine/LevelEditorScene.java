@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import components.SpriteRenderer;
+import util.AssetPool;
 
 public class LevelEditorScene extends Scene {
     public LevelEditorScene(){
@@ -34,6 +35,12 @@ public class LevelEditorScene extends Scene {
                 this.addGameObjectToScene(go);
             }
         }
+
+        loadResources();
+    }
+
+    private void loadResources(){
+        AssetPool.getShader("assets/shaders/defaultShader.glsl")
     }
 
     @Override
