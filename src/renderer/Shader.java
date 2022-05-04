@@ -187,4 +187,11 @@ public class Shader {
         use();
         glUniform1iv(varLoaction, array);
     }
+
+    public void uploadBool(String varName, Boolean val){
+        int value = val ? 1 : 0;
+        int varLoaction = glGetUniformLocation(shaderProgramID, varName);
+        use();
+        glUniform1i(varLoaction, value);
+    }
 }

@@ -145,6 +145,8 @@ public class Window {
         float endTime = (float)glfwGetTime();
         float dt = -1.0f;
 
+        
+
         while (!glfwWindowShouldClose(glfwWindow)) {
             //Poll events
             glfwPollEvents();
@@ -163,5 +165,20 @@ public class Window {
             dt = endTime - beginTime;
             beginTime = endTime;
         }
+    }
+
+    public void innitLoop(float dt){
+        glfwPollEvents();
+
+            glClearColor(r,g,b,a);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            if (dt>=0) {
+                currentScene.update(dt);
+            }
+            
+            
+
+            glfwSwapBuffers(glfwWindow);
     }
 }
