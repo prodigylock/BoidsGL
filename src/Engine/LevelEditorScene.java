@@ -14,27 +14,19 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
-        this.camera = new Camera(new Vector2f(-250,0));
+        this.camera = new Camera(new Vector2f(0,0));
 
-        int xOffset = 10;
-        int yOffset = 10;
+        GameObject bg = new GameObject("background", new Transform(new Vector2f(0,0), new Vector2f(1920,1080)));
+        bg.addComponent(new SpriteRenderer(new Vector4f(1,1,1,1)));
+        this.addGameObjectToScene(bg);
 
-        float totalWidth = (float)(600-xOffset*2);
-        float totalHeight = (float)(300-xOffset*2);
-        float sizeX = totalWidth/100.0f;
-        float sizeY = totalHeight/100.0f;
-        float padding = 3;
+        GameObject obj1 = new GameObject("obj1", new Transform(new Vector2f(100,100), new Vector2f(256,256) ));
+        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage.png")));
+        this.addGameObjectToScene(obj1);
 
-        for (int x = 0; x < 100; x++) {
-            for (int y = 0; y < 100; y++) {
-                float xPos = xOffset + (x*sizeX)+ (padding*x);
-                float yPos = yOffset + (y*sizeY)+ (padding*y);
-
-                GameObject go = new GameObject("Obj"+x+ ""+y, new Transform(new Vector2f(xPos,yPos), new Vector2f(sizeX,sizeY)));
-                go.addComponent(new SpriteRenderer(new Vector4f(xPos/totalWidth, yPos/totalHeight,1,1)));
-                this.addGameObjectToScene(go);
-            }
-        }
+        GameObject obj2 = new GameObject("obj2", new Transform(new Vector2f(400,100), new Vector2f(256,256) ));
+        obj2.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage.jpg")));
+        this.addGameObjectToScene(obj2);
 
         loadResources();
     }

@@ -8,8 +8,6 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import util.Time;
-
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -143,8 +141,8 @@ public class Window {
     }
 
     public void loop(){
-        float beginTime = Time.getTime();
-        float endTime = Time.getTime();
+        float beginTime = (float)glfwGetTime();
+        float endTime = (float)glfwGetTime();
         float dt = -1.0f;
 
         while (!glfwWindowShouldClose(glfwWindow)) {
@@ -161,7 +159,7 @@ public class Window {
 
 
             glfwSwapBuffers(glfwWindow);
-            endTime = Time.getTime();
+            endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
         }
