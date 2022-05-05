@@ -203,7 +203,6 @@ public class RenderBatch {
                 AorB = true;
             }
         }
-        System.out.println(firstTime);
 
         glDrawElements(GL_TRIANGLES, this.numSprites*6, GL_UNSIGNED_INT, 0);
         firstTime = 0;
@@ -269,8 +268,11 @@ public class RenderBatch {
                 yAdd=1.0f;
             }
 
-            vertices[offset] =  sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x);
-            vertices[offset+1] =  sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y);
+            if(firstTime==1){
+                vertices[offset] =  sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x);
+                vertices[offset+1] =  sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y);
+            }
+            
 
             //load color
 

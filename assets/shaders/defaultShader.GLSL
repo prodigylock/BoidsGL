@@ -91,7 +91,7 @@ void main(){
 
         float blue = thisB+(((difB *col.b)-(thisB*thisR*thisR)+(feed*(1-thisB)))*deltaT);
 
-        color = vec4(red,0,blue,blue);
+        color = vec4(red,0,blue,0);
 
 
         //iterate over texture

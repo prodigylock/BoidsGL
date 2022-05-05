@@ -1,5 +1,7 @@
 package Engine;
 
+import java.nio.IntBuffer;
+
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -7,6 +9,11 @@ import components.SpriteRenderer;
 import util.AssetPool;
 
 public class LevelEditorScene extends Scene {
+
+    private IntBuffer tempBuffer;
+    private IntBuffer tempBuffer2;
+
+
     public LevelEditorScene(){
         
     }
@@ -20,8 +27,8 @@ public class LevelEditorScene extends Scene {
         // bg.addComponent(new SpriteRenderer(new Vector4f(1,1,1,1)));
         // this.addGameObjectToScene(bg);
 
-        GameObject obj1 = new GameObject("obj1", new Transform(new Vector2f(0,0), new Vector2f(1280,720) ));
-        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage.png")));
+        GameObject obj1 = new GameObject("obj1", new Transform(new Vector2f(0,0), new Vector2f(1280,672) ));
+        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/Untitled.png")));
         this.addGameObjectToScene(obj1);
 
         // GameObject obj2 = new GameObject("obj2", new Transform(new Vector2f(400,100), new Vector2f(256,256) ));

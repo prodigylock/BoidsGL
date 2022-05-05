@@ -37,8 +37,8 @@ public class Window {
 
     //private so its cant be called frome the outside to make multiple
     private Window(){
-        this.width = 1280;
-        this.height = 720;
+        this.width = 1920;
+        this.height = 1080;
         this.title = "Boids";
         r = 0;
         g = 0;
@@ -110,7 +110,7 @@ public class Window {
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
         //create the window, which is a number where the window exists in memory
-        glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
+        glfwWindow = glfwCreateWindow(this.width, this.height, this.title, glfwGetPrimaryMonitor(), NULL);
         if (glfwWindow==NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
@@ -162,8 +162,14 @@ public class Window {
             }
             
             if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                glfwSwapInterval(0);
+            } else {
+                glfwSwapInterval(1);
+            }
+
+            if (KeyListener.isKeyPressed(GLFW_KEY_ENTER)) {
                 for (RenderBatch batch : currentScene.renderer.batches) {
-                    batch.firstTime = 0;
+                    batch.firstTime = 1;
                 }
             }
             
