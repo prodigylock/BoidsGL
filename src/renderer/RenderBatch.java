@@ -52,7 +52,7 @@ public class RenderBatch {
 
     private ByteBuffer nill;
 
-    private boolean usingFB = false;
+    private boolean usingFB = true;
     private boolean AorB = true;
     public boolean firstTime = true;
 
@@ -109,7 +109,7 @@ public class RenderBatch {
         fboID_B = glGenFramebuffers();
 
         bindFB_A();
-        bindFB_B();
+        
 
 
         //bind texture to frame buffer A
@@ -126,6 +126,7 @@ public class RenderBatch {
             assert false:"FrameBuffer A failed to initialise";
         }
         
+        bindFB_B();
 
         //bind texture to frame buffer B
         glBindTexture(GL_TEXTURE_2D, fboTex_B);
@@ -251,7 +252,7 @@ public class RenderBatch {
         glEnableVertexAttribArray(1);
 
         glActiveTexture(GL_TEXTURE2);
-
+        
         if (usingFB) {
             if (AorB) {
                 bindFB_A();
@@ -261,13 +262,14 @@ public class RenderBatch {
                 AorB = true;
             }
         }
-        
+        System.out.println(firstTime);
         if (firstTime) {
+            
             glDrawElements(GL_TRIANGLES, this.numSprites*6, GL_UNSIGNED_INT, 0);
         }
         //firstTime = false;
         
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID_A);
+        //glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID_B);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
         glBlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1920, 1080, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
