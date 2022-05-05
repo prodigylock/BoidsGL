@@ -6,6 +6,9 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
+
+import renderer.RenderBatch;
+
 import static org.lwjgl.opengl.GL20.*;
 
 import java.nio.*;
@@ -158,6 +161,11 @@ public class Window {
                 currentScene.update(dt);
             }
             
+            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+                for (RenderBatch batch : currentScene.renderer.batches) {
+                    batch.firstTime = false;
+                }
+            }
             
 
             glfwSwapBuffers(glfwWindow);

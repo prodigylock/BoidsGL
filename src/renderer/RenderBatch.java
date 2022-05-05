@@ -54,7 +54,7 @@ public class RenderBatch {
 
     private boolean usingFB = false;
     private boolean AorB = true;
-    private boolean firstTime = true;
+    public boolean firstTime = true;
 
     public RenderBatch(int maxBatchSize){
 
@@ -100,6 +100,43 @@ public class RenderBatch {
         glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
         
+
+        //load frame buffer and its texture
+        fboTex_A = glGenTextures();
+        fboID_A = glGenFramebuffers();
+
+        fboTex_B = glGenTextures();
+        fboID_B = glGenFramebuffers();
+
+
+        //bind texture to frame buffer A
+        glBindTexture(GL_TEXTURE_2D, fboTex_A);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, nill);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
+	    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex_A, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            assert false:"FrameBuffer A failed to initialise";
+        }
+        
+
+        //bind texture to frame buffer B
+        glBindTexture(GL_TEXTURE_2D, fboTex_B);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, nill);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
+	    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex_B, 0);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            assert false:"FrameBuffer B failed to initialise";
+        }
+
 
         //frame buffer experiment
 
@@ -225,7 +262,7 @@ public class RenderBatch {
         if (firstTime) {
             glDrawElements(GL_TRIANGLES, this.numSprites*6, GL_UNSIGNED_INT, 0);
         }
-        firstTime = false;
+        //firstTime = false;
         
         glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID_A);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -333,45 +370,18 @@ public class RenderBatch {
     }
 
     public void bindFB_A(){
-        //create frame buffer A
-        fboID_A = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, fboID_A);
         
         //bind texture to frame buffer A
-        fboTex_A = glGenTextures();
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, fboTex_A);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, nill);
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex_A, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            assert false:"FrameBuffer A failed to initialise";
-        }
+        
+        // glActiveTexture(GL_TEXTURE1);
+        
     }
-
     public void bindFB_B(){
         //create frame buffer B
-        fboID_B = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, fboID_B);
         
-        //bind texture to frame buffer B
-        fboTex_B = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, fboTex_B);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, nill);
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex_B, 0);
-
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            assert false:"FrameBuffer B failed to initialise";
-        }
+        
     }
 
 }
