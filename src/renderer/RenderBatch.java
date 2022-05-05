@@ -212,7 +212,7 @@ public class RenderBatch {
 
         //displays FB onto screen
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glBlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1280, 720, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1920, 1080, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
         glActiveTexture(GL_TEXTURE2);
         if (!AorB) {
