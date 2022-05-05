@@ -54,7 +54,7 @@ public class RenderBatch {
 
     private boolean usingFB = true;
     private boolean AorB = true;
-    public boolean firstTime = true;
+    public int firstTime = 1;
 
     public RenderBatch(int maxBatchSize){
 
@@ -142,64 +142,6 @@ public class RenderBatch {
         }
 
 
-        //frame buffer experiment
-
-        /*
-        =============================================
-                    Order of opertaions:
-        =============================================
-        1) bind frame buffer A
-        2) render initial data
-        
-        3)enter game loop
-        4)bind frame buffer B
-        5)Run shader program that does the simulation update
-            a. This will probably take the texture from Framebuffer A and then render a new result based on that texture
-        6)Render the texture in Framebuffer B to the main Window
-        7)7. Repeat from step 4, except swap A and B this time
-
-        =(Data)=>A=(update)=>B=(update)=>...
-        =============================================
-        */
-
-
-        // //create frame buffer A
-        // fboID_A = glGenFramebuffers();
-        // glBindFramebuffer(GL_FRAMEBUFFER, fboID_A);
-        
-        // //bind texture to frame buffer A
-        // fboTex_A = glGenTextures();
-        // glBindTexture(GL_TEXTURE_2D, fboTex_A);
-        // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, nill);
-	    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex_A, 0);
-        // glBindTexture(GL_TEXTURE_2D, 0);
-
-        // if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        //     assert false:"FrameBuffer A failed to initialise";
-        // }
-
-
-        // //create frame buffer B
-        // fboID_B = glGenFramebuffers();
-        // glBindFramebuffer(GL_FRAMEBUFFER, fboID_B);
-        
-        // //bind texture to frame buffer B
-        // fboTex_B = glGenTextures();
-        // glBindTexture(GL_TEXTURE_2D, fboTex_B);
-        // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, nill);
-	    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
-	    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex_B, 0);
-
-        // if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        //     assert false:"FrameBuffer B failed to initialise";
-        // }
 
     }
 
@@ -231,7 +173,6 @@ public class RenderBatch {
 
     public void render(){
         //for noww rebuffer all data every frame
-
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
         for (int i = 0; i < textures.size(); i++) {
@@ -240,7 +181,7 @@ public class RenderBatch {
         }
 
         shader.uploadintArray("uTextures", texSlots);
-        shader.uploadBool("firstTime", firstTime);
+        shader.uploadInt("firstTime", firstTime);
 
         //use shader
         shader.use();
@@ -263,15 +204,23 @@ public class RenderBatch {
             }
         }
         System.out.println(firstTime);
-        if (firstTime) {
-            
-            glDrawElements(GL_TRIANGLES, this.numSprites*6, GL_UNSIGNED_INT, 0);
-        }
-        //firstTime = false;
-        
+
+        glDrawElements(GL_TRIANGLES, this.numSprites*6, GL_UNSIGNED_INT, 0);
+        firstTime = 0;
+
         //glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID_B);
+
+        //displays FB onto screen
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glBlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1920, 1080, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1280, 720, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+        glActiveTexture(GL_TEXTURE2);
+        if (!AorB) {
+            glBindTexture(GL_TEXTURE_2D, fboTex_A);
+        } else {
+            glBindTexture(GL_TEXTURE_2D, fboTex_B);
+        }
+        glActiveTexture(GL_TEXTURE1);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);

@@ -37,25 +37,14 @@ out vec4 color;
 
 void main(){
 
-    
-        // int id = int(fTexId);
-        // color = fColor * texture(uTextures[id], fTexCoords);
-        // //color = vec4(fTexCoords,0,1);
-
     if (firstTime==1){
-        if (fTexId>0){
-        int id = int(fTexId);
+        //first render aka rendering the initial data
         color = fColor * texture(uTextures[1], fTexCoords);
-        //color = vec4(fTexCoords,0,1);
-        } else {
-        color = fColor;
-        }
+    
     } else {
-        int id = int(fTexId);
+        //iterate over texture
         color = fColor * texture(uTextures[2], fTexCoords);
+        
     }
-    
-    
-    
 }
 

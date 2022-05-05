@@ -37,8 +37,8 @@ public class Window {
 
     //private so its cant be called frome the outside to make multiple
     private Window(){
-        this.width = 1920;
-        this.height = 1080;
+        this.width = 1280;
+        this.height = 720;
         this.title = "Boids";
         r = 0;
         g = 0;
@@ -163,7 +163,7 @@ public class Window {
             
             if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
                 for (RenderBatch batch : currentScene.renderer.batches) {
-                    batch.firstTime = false;
+                    batch.firstTime = 0;
                 }
             }
             
