@@ -108,6 +108,9 @@ public class RenderBatch {
         fboTex_B = glGenTextures();
         fboID_B = glGenFramebuffers();
 
+        bindFB_A();
+        bindFB_B();
+
 
         //bind texture to frame buffer A
         glBindTexture(GL_TEXTURE_2D, fboTex_A);
@@ -117,7 +120,7 @@ public class RenderBatch {
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Prevents edge bleeding
 	    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex_A, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        //glBindTexture(GL_TEXTURE_2D, 0);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
             assert false:"FrameBuffer A failed to initialise";
@@ -372,11 +375,8 @@ public class RenderBatch {
     public void bindFB_A(){
         glBindFramebuffer(GL_FRAMEBUFFER, fboID_A);
         
-        //bind texture to frame buffer A
-        
-        // glActiveTexture(GL_TEXTURE1);
-        
     }
+
     public void bindFB_B(){
         //create frame buffer B
         glBindFramebuffer(GL_FRAMEBUFFER, fboID_B);
